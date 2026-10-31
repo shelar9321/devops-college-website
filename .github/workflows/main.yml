@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,16 @@ jobs:
           context: .
           push: true
           tags: shelar1512/college-website:latest
+
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker pull shelar1512/college-website:latest
+            sudo docker stop college-site || true
+            sudo docker rm college-site || true
+            sudo docker run -d --restart unless-stopped --name college-site -p 80:80 shelar1512/college-website:latest
+
