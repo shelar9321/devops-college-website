@@ -32,5 +32,5 @@ flowchart TD
     H --> I[College Website]
     F --> J[Node Exporter]
     J --> K[Prometheus]
-    K -.-> L[Grafana - Currently Stopped]
-
+    K -.-> L[Grafana]
+eof
